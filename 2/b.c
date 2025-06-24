@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Node structure
 struct Node {
     int data;
     struct Node* next;
@@ -8,28 +9,22 @@ struct Node {
 
 struct Node* head = NULL;
 
-// Create new node
-struct Node* createNode(int value) {
+// Insert at middle
+void insertAtMiddle(int value) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = value;
     newNode->next = NULL;
-    return newNode;
-}
 
-// Insert node at middle
-void insertAtMiddle(int value) {
-    struct Node* newNode = createNode(value);
-
-    // If list is empty or has 1 node
+    // If list is empty or has only one node
     if (head == NULL || head->next == NULL) {
         newNode->next = head;
         head = newNode;
+        printf("Inserted %d at middle.\n", value);
         return;
     }
 
     int count = 0;
     struct Node* temp = head;
-
     while (temp != NULL) {
         count++;
         temp = temp->next;
@@ -37,6 +32,7 @@ void insertAtMiddle(int value) {
 
     int mid = count / 2;
     temp = head;
+
     for (int i = 1; i < mid; i++) {
         temp = temp->next;
     }
@@ -44,13 +40,19 @@ void insertAtMiddle(int value) {
     newNode->next = temp->next;
     temp->next = newNode;
 
-    printf("Node %d inserted at middle.\n", value);
+    printf("Inserted %d at middle.\n", value);
 }
 
 // Display list
 void display() {
     struct Node* temp = head;
-    printf("Linked List: ");
+
+    if (temp == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    printf("List: ");
     while (temp != NULL) {
         printf("%d -> ", temp->data);
         temp = temp->next;
@@ -58,37 +60,34 @@ void display() {
     printf("NULL\n");
 }
 
-// Main function
+// Main with switch-case menu
 int main() {
-    int n, val;
+    int choice, value;
 
-    printf("Enter how many initial nodes you want: ");
-    scanf("%d", &n);
+    while (1) {
+        printf("\n*** MENU ***\n");
+        printf("1. Insert at Middle\n");
+        printf("2. Display List\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    for (int i = 0; i < n; i++) {
-        printf("Enter value for node %d: ", i + 1);
-        scanf("%d", &val);
-        // Build list manually without insertAtEnd
-        struct Node* newNode = createNode(val);
-        if (head == NULL) {
-            head = newNode;
-        } else {
-            struct Node* temp = head;
-            while (temp->next != NULL)
-                temp = temp->next;
-            temp->next = newNode;
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert at middle: ");
+                scanf("%d", &value);
+                insertAtMiddle(value);
+                break;
+            case 2:
+                display();
+                break;
+            case 3:
+                printf("Exiting program.\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Try again.\n");
         }
     }
-
-    printf("\nInitial ");
-    display();
-
-    printf("\nEnter value to insert at middle: ");
-    scanf("%d", &val);
-    insertAtMiddle(val);
-
-    printf("\nAfter insertion ");
-    display();
 
     return 0;
 }
